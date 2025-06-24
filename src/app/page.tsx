@@ -1,3 +1,4 @@
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 export default function Home() {
   return (
@@ -13,6 +14,17 @@ export default function Home() {
             href="/receitas"
           >
             Ver todas as receitas
+          </Link>
+        </div>
+      </section>
+
+      <section>
+        <div className="container mx-auto">
+          <h2>Receitas em Destaque</h2>
+
+          <Link href="/receitas">
+          Ver todas as receitas
+          <ChevronRight/>
           </Link>
         </div>
       </section>
