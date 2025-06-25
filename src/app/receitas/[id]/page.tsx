@@ -26,7 +26,7 @@ export default function ReceitaPage({ params }: RecipePageProps) {
           Voltar para receitas
         </Link>
 
-        <section className="rounded-lg overflow-hidden shasow-md">
+        <section className="sm:rounded-lg overflow-hidden shasow-md">
           <div className="relative h-96 w-full">
             <Image
               src={recipe.image}
@@ -42,14 +42,14 @@ export default function ReceitaPage({ params }: RecipePageProps) {
               <p>{recipe.description}</p>
             </div>
 
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center sm:justify-start">
                 <InfoPill title={"Preparo"} info={recipe.prepTime}/>
                 <InfoPill title={"Cozimento"} info={recipe.cookTime}/>
                 <InfoPill title={"Porções"} info={recipe.servings}/>
                 <InfoPill title={"Categoria"} info={recipe.category}/>
             </div>
 
-            <div className="grid grid-cols-2">
+            <div className="grid sm:grid-cols-2 gap-2">
               <div>
                 <h2 className="text-xl font-bold mb-4">Ingredientes</h2>
                 <ul className="list-disc list-inside space-y-2">
