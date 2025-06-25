@@ -3,6 +3,7 @@ import { ChevronLeft } from "lucide-react";
 import Image from "next/image";
 import { recipes } from "@/lib/data";
 import { notFound } from "next/navigation";
+import InfoPill from "@/components/InfoPill";
 interface RecipePageProps {
   params: {
     id: string;
@@ -40,7 +41,12 @@ export default function ReceitaPage({ params }: RecipePageProps) {
               <p>{recipe.description}</p>
             </div>
 
-            <div>{/* componentes de info */}</div>
+            <div className="flex gap-4">
+                <InfoPill title={"Preparo"} info={recipe.prepTime}/>
+                <InfoPill title={"Cozimento"} info={recipe.cookTime}/>
+                <InfoPill title={"Porções"} info={recipe.servings}/>
+                <InfoPill title={"Categoria"} info={recipe.category}/>
+            </div>
 
             <div className="grid grid-cols-2">
               <div>
