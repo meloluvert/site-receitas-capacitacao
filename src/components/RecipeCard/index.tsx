@@ -6,7 +6,7 @@ interface RecipeCardProps{
 }
 export function RecipeCard({recipe}:RecipeCardProps) {
     return(
-        <Link href={`/receitas/${recipe.id}`}>
+        <Link href={`/receitas/${recipe.id}`} className="w-full sm:w-auto">
             <div className="border border-slate-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                 <div className="relative h-48 w-full">
                     <Image

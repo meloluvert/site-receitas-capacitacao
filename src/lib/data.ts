@@ -105,4 +105,81 @@ export type Recipe = {
       ],
       category: "Entradas",
     },
+    {
+      id: "4",
+      title: "Omelete de Espinafre",
+      description: "Uma omelete nutritiva e rápida, perfeita para o café da manhã ou jantar leve.",
+      image: "/receitas/omelete-espinafre.jpg",
+      prepTime: "5 minutos",
+      cookTime: "10 minutos",
+      servings: 1,
+      ingredients: [
+        "2 ovos",
+        "1/2 xícara de folhas de espinafre",
+        "2 colheres de sopa de leite",
+        "1 colher de sopa de azeite",
+        "Sal e pimenta a gosto"
+      ],
+      instructions: [
+        "Bata os ovos com o leite, o sal e a pimenta.",
+        "Aqueça o azeite em uma frigideira antiaderente.",
+        "Refogue o espinafre por 1-2 minutos até murchar.",
+        "Despeje a mistura de ovos na frigideira.",
+        "Cozinhe por cerca de 5 minutos ou até a omelete firmar.",
+        "Dobre ao meio e sirva quente."
+      ],
+      category: "Café da Manhã"
+    },
+    {
+      id: "5",
+      title: "Macarrão ao Alho e Óleo",
+      description: "Uma receita clássica e simples da culinária italiana, com alho dourado e azeite.",
+      image: "/receitas/macarrao-alho-oleo.jpg",
+      prepTime: "10 minutos",
+      cookTime: "15 minutos",
+      servings: 2,
+      ingredients: [
+        "200g de espaguete",
+        "4 dentes de alho fatiados",
+        "4 colheres de sopa de azeite de oliva",
+        "1 pitada de pimenta calabresa (opcional)",
+        "Sal a gosto",
+        "Salsinha picada para finalizar"
+      ],
+      instructions: [
+        "Cozinhe o espaguete em água salgada até ficar al dente.",
+        "Enquanto isso, aqueça o azeite em uma frigideira e doure o alho.",
+        "Adicione a pimenta calabresa, se desejar.",
+        "Escorra o macarrão e misture com o alho e azeite.",
+        "Finalize com salsinha picada e sirva quente."
+      ],
+      category: "Prato Principal"
+    },
+    {
+      id: "6",
+      title: "Panquecas Americanas",
+      description: "Fofinhas e deliciosas, ideais para um café da manhã especial com mel ou frutas.",
+      image: "/receitas/panquecas-americanas.jpg",
+      prepTime: "10 minutos",
+      cookTime: "15 minutos",
+      servings: 4,
+      ingredients: [
+        "1 xícara de farinha de trigo",
+        "1 colher de sopa de açúcar",
+        "1 colher de chá de fermento em pó",
+        "1/2 colher de chá de sal",
+        "1 xícara de leite",
+        "1 ovo",
+        "2 colheres de sopa de manteiga derretida"
+      ],
+      instructions: [
+        "Misture os ingredientes secos em uma tigela.",
+        "Em outra tigela, misture o leite, o ovo e a manteiga.",
+        "Adicione os líquidos aos secos e mexa até incorporar (sem bater demais).",
+        "Aqueça uma frigideira e unte levemente com manteiga.",
+        "Coloque porções da massa e cozinhe até formar bolhas.",
+        "Vire e doure o outro lado. Sirva com mel ou frutas."
+      ],
+      category: "Café da Manhã"
+    }
   ]
