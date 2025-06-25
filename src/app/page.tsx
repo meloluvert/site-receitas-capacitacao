@@ -26,7 +26,7 @@ export default function Home() {
           <h2 className="text-lg font-bold">Receitas em Destaque</h2>
           <div className="flex w-full gap-8">
             {featuredRecipes.map((recipe) => (
-              <RecipeCard key={recipes.id} recipe={recipe} />
+              <RecipeCard key={recipe.id} recipe={recipe} />
             ))}
           </div>
           <Link
