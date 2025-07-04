@@ -39,6 +39,7 @@ export function RecipeCard({ recipe, onEdit, onDelete }: RecipeCardProps) {
 
             <div className="flex items-center ">
               {/* editar                 */}
+              
               <button type="button" onClick={(e) => handleEdit(e)} className="p-2 border border-gray-200 rounded hover:bg-gray-200 transition-colors">
                 <Edit size={16} />
               </button>
