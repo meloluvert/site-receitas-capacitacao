@@ -19,17 +19,17 @@ interface RecipeFormModalProps {
   onClose: () => void;
 }
 
-const DEFAULT_VALUES: RecipeFormData ={
-  title:"",
-  category:"",
-  description:"",
-  imageURL:"",
-  prepTime:"",
-  cookTime:"",
-  servings:1,
-  ingredients: [{value:""}],
-  instructions: [{value: ""}]
-}
+const DEFAULT_VALUES: RecipeFormData = {
+  title: "",
+  category: "",
+  description: "",
+  imageURL: "",
+  prepTime: "",
+  cookTime: "",
+  servings: 1,
+  ingredients: [{ value: "" }],
+  instructions: [{ value: "" }],
+};
 export default function RecipeFormModal({
   isOpen,
   onClose,
@@ -42,7 +42,7 @@ export default function RecipeFormModal({
     control,
   } = useForm<RecipeFormData>({
     resolver: yupResolver(recipeSchema),
-    defaultValues:DEFAULT_VALUES,
+    defaultValues: DEFAULT_VALUES,
     mode: "onSubmit",
   });
 
@@ -65,15 +65,20 @@ export default function RecipeFormModal({
   });
 
   const onSubmit = (data: RecipeFormData) => {
-    console.log(data);
+    const recipeData = {
+      ...data,
+      ingredients: data.ingredients.map((ingredient) => ingredient.value),
+      instructions: data.ingredients.map((instruction) => instruction.value),
+    };
+    console.log(recipeData);
     reset();
     onClose();
   };
 
-  const inputStyle = "p-2 border border-zinc-200 rounded-md flex-grow";
+  const inputStyle = "p-2 border border-zinc-200 rounded-md flex-grow w-full";
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-white min-w-2xl">
+      <DialogContent className="bg-white min-w-2xl max-h-[90vh] overflow-scroll">
         <DialogHeader>
           <DialogTitle>Nova receita</DialogTitle>
         </DialogHeader>
@@ -202,17 +207,36 @@ export default function RecipeFormModal({
               {/* content */}
               {ingredientsFields.map((field, index) => (
                 <div key={field.id} className="flex gap-2">
-                  <input type="text" id="ingredients" className={inputStyle} {...register(`ingredients.${index}.value`)} placeholder="Digite um ingrediente"/>
-                  {ingredientsFields.length>1 && <button
-                    type="button"
-                    className="bg-white border border-zinc-300 rounded-md hover:bg-gray-100 transition-colors px-4 py-2 font-medium"
-                    onClick={() => removeIngredients(index)}
-                  >
-                    Remover
-                  </button>}
+                  <div className="flex-grow">
+                    <input
+                      type="text"
+                      id="ingredients"
+                      className={inputStyle}
+                      {...register(`ingredients.${index}.value`)}
+                      placeholder="Digite um ingrediente"
+                    />
+                    {errors.ingredients?.[index]?.value && (
+                      <span className="text-sm text-red-500">
+                        {" "}
+                        {errors.ingredients?.[index].value.message}
+                      </span>
+                    )}
+                  </div>
+                  {ingredientsFields.length > 1 && (
+                    <button
+                      type="button"
+                      className="bg-white border border-zinc-300 rounded-md hover:bg-gray-100 transition-colors px-4 py-2 font-medium"
+                      onClick={() => removeIngredients(index)}
+                    >
+                      Remover
+                    </button>
+                  )}
                 </div>
               ))}
-              <button className=" w-fit bg-white border border-zinc-300 rounded-md hover:bg-gray-100 transition-colors px-4 py-2 font-medium"  onClick={() => appendIngredients({value:""})}>
+              <button
+                className=" w-fit bg-white border border-zinc-300 rounded-md hover:bg-gray-100 transition-colors px-4 py-2 font-medium"
+                onClick={() => appendIngredients({ value: "" })}
+              >
                 Adicionar Ingredientes
               </button>
             </div>
@@ -224,18 +248,36 @@ export default function RecipeFormModal({
               {/* conteúdo */}
               {instructionFields.map((field, index) => (
                 <div key={field.id} className="flex gap-2">
-                  <input type="text" id="instructions" className={inputStyle} {...register(`instructions.${index}.value`)} placeholder="Digite uma instrução"/>
-                  {instructionFields.length>1 && <button
-                    type="button"
-                    className="bg-white border border-zinc-300 rounded-md hover:bg-gray-100 transition-colors px-4 py-2 font-medium"
-                    onClick={() => removeInstructions(index)}
-                  >
-                    Remover
-                  </button>}
+                  <div className="flex-grow">
+                    <textarea
+                      id="instructions"
+                      className={inputStyle}
+                      {...register(`instructions.${index}.value`)}
+                      placeholder="Digite uma instrução"
+                    />
+                    {errors.instructions?.[index]?.value && (
+                      <span className="text-sm text-red-500">
+                        {" "}
+                        {errors.instructions?.[index].value.message}
+                      </span>
+                    )}
+                  </div>
+
+                  {instructionFields.length > 1 && (
+                    <button
+                      type="button"
+                      className="bg-white border border-zinc-300 rounded-md hover:bg-gray-100 transition-colors px-4 py-2 font-medium"
+                      onClick={() => removeInstructions(index)}
+                    >
+                      Remover
+                    </button>
+                  )}
                 </div>
               ))}
-              <button className=" w-fit bg-white border border-zinc-300 rounded-md hover:bg-gray-100 transition-colors px-4 py-2 font-medium"
-              onClick={() => appendInstructions({value:""})}>
+              <button
+                className=" w-fit bg-white border border-zinc-300 rounded-md hover:bg-gray-100 transition-colors px-4 py-2 font-medium"
+                onClick={() => appendInstructions({ value: "" })}
+              >
                 Adicionar Instruções
               </button>
             </div>
