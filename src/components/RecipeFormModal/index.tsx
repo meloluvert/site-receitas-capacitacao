@@ -1,3 +1,4 @@
+import { useForm } from "react-hook-form";
 import {
   Dialog,
   DialogClose,
@@ -8,6 +9,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
+import { RecipeFormData, recipeSchema } from "@/lib/formValidationSchemas/recipeSchema";
+import { yupResolver } from "@hookform/resolvers/yup";
 interface RecipeFormModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -16,6 +19,23 @@ export default function RecipeFormModal({
   isOpen,
   onClose,
 }: RecipeFormModalProps) {
+
+  const {
+    register,
+    reset,
+    handleSubmit,
+    formState:{errors}
+  } = useForm<RecipeFormData>({
+    resolver:yupResolver(recipeSchema),
+    mode: "onSubmit"
+  })
+
+  const onSubmit = (data:RecipeFormData) =>{
+    console.log(data)
+    reset()
+    onClose()
+  }
+
   const inputStyle = "p-2 border border-zinc-200 rounded-md"
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -23,7 +43,7 @@ export default function RecipeFormModal({
         <DialogHeader>
           <DialogTitle>Nova receita</DialogTitle>
         </DialogHeader>
-        <form className="flex flex-col gap-4 w-full">
+        <form className="flex flex-col gap-4 w-full" onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-2 gap-2">
             {/* Título */}
             <div className="flex flex-col gap-1">
@@ -31,9 +51,10 @@ export default function RecipeFormModal({
               <input
                 className={inputStyle}
                 type="text"
-                name=""
                 id="title"
+                {...register("title")}
               />
+              {errors.title && <span className="text-sm text-red-500">{errors.title.message}</span> }
             </div>
             {/* categoria */}
             <div className="flex flex-col gap-1">
@@ -41,22 +62,26 @@ export default function RecipeFormModal({
               <input
                 className={inputStyle}
                 type="text"
-                name=""
+                {...register("category")}
                 id="category"
               />
+              {errors.category && <span className="text-sm text-red-500">{errors.category.message}</span> }
             </div>
+            
           </div>
           {/* Descrição */}
           <div className="flex flex-col gap-1">
             <label htmlFor="description">Descrição</label>
-            <textarea name="" id="description" className={inputStyle}></textarea>
+            <textarea {...register("description")} id="description" className={inputStyle}></textarea>
+            {errors.description && <span className="text-sm text-red-500">{errors.description.message}</span> }
           </div>
 
 
           {/* URL DA IMAGEM */}
           <div className="flex flex-col gap-1">
             <label htmlFor="imageUrl">URL da imagem</label>
-            <input name="" type="text" placeholder="/placeholder.svg" id="imageUrl" className={inputStyle}/>
+            <input {...register("imageURL")} type="text" placeholder="/placeholder.svg" id="imageUrl" className={inputStyle}/>
+            {errors.imageURL && <span className="text-sm text-red-500">{errors.imageURL.message}</span> }
           </div>
 
 
@@ -68,10 +93,11 @@ export default function RecipeFormModal({
               <input
                 className={inputStyle}
                 type="text"
-                name=""
+                {...register("prepTime")}
                 id="prepTime"
                 placeholder="15 minutos"
               />
+              {errors.prepTime && <span className="text-sm text-red-500">{errors.prepTime.message}</span> }
             </div>
              {/* Cozimento  */}
              <div className="flex flex-col gap-1">
@@ -79,10 +105,11 @@ export default function RecipeFormModal({
               <input
                 className={inputStyle}
                 type="text"
-                name=""
+                {...register("cookTime")}
                 id="cookTime"
                 placeholder="30 minutos"
               />
+              {errors.cookTime && <span className="text-sm text-red-500">{errors.cookTime.message}</span> }
             </div>
              {/* Porções */}
              <div className="flex flex-col gap-1">
@@ -90,11 +117,13 @@ export default function RecipeFormModal({
               <input
                 className={inputStyle}
                 type="number"
-                name=""
+                {...register("servings")}
                 id="servings"
                 defaultValue={1}
               />
+
             </div>
+            {errors.servings && <span className="text-sm text-red-500">{errors.servings.message}</span> }
           </div>
 
           <div className="flex gap-2 self-end">
