@@ -14,6 +14,25 @@ export const recipeSchema = yup.object().shape({
     .integer("O número de porções deve ser inteiro")
     .min(1, "Deve haver pelo menos uma porção")
     .required("O número de porções é obrigatório"),
+    ingredients: yup
+    .array()
+    .of(
+        yup.object({
+            value: yup.string().required("O ingrediente não pode ser vazio")
+        })
+    )
+    .min(1, "Adicione pelo menos 1 instrução")
+    .required("Os ingredientes são obrigatórios"),
+    instructions: yup
+    .array()
+    .of(
+        yup.object({
+            value: yup.string().required("A instrução não pode ser vazia")
+        })
+    )
+    .min(1, "Adicione pelo menos 1 instrução")
+    .required("As instruções são obrigatórios"),
+
 })
 
 //inferindo o tipo

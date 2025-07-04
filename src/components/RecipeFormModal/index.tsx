@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import {
   Dialog,
   DialogClose,
@@ -18,6 +18,18 @@ interface RecipeFormModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+const DEFAULT_VALUES: RecipeFormData ={
+  title:"",
+  category:"",
+  description:"",
+  imageURL:"",
+  prepTime:"",
+  cookTime:"",
+  servings:1,
+  ingredients: [{value:""}],
+  instructions: [{value: ""}]
+}
 export default function RecipeFormModal({
   isOpen,
   onClose,
@@ -27,9 +39,29 @@ export default function RecipeFormModal({
     reset,
     handleSubmit,
     formState: { errors },
+    control,
   } = useForm<RecipeFormData>({
     resolver: yupResolver(recipeSchema),
+    defaultValues:DEFAULT_VALUES,
     mode: "onSubmit",
+  });
+
+  const {
+    fields: ingredientsFields,
+    append: appendIngredients,
+    remove: removeIngredients,
+  } = useFieldArray({
+    control,
+    name: "ingredients",
+  });
+
+  const {
+    fields: instructionFields,
+    append: appendInstructions,
+    remove: removeInstructions,
+  } = useFieldArray({
+    control,
+    name: "instructions",
   });
 
   const onSubmit = (data: RecipeFormData) => {
@@ -41,7 +73,7 @@ export default function RecipeFormModal({
   const inputStyle = "p-2 border border-zinc-200 rounded-md flex-grow";
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-white">
+      <DialogContent className="bg-white min-w-2xl">
         <DialogHeader>
           <DialogTitle>Nova receita</DialogTitle>
         </DialogHeader>
@@ -168,16 +200,19 @@ export default function RecipeFormModal({
             <label htmlFor="ingredients">Ingredientes</label>
             <div className="flex flex-col gap-1">
               {/* content */}
-              <div className="flex gap-2">
-                <input type="text" id="ingredients" className={inputStyle} />
-                <button
-                  type="button"
-                  className="bg-white border border-zinc-300 rounded-md hover:bg-gray-100 transition-colors px-4 py-2 font-medium"
-                >
-                  Remover
-                </button>
-              </div>
-              <button className=" w-fit bg-white border border-zinc-300 rounded-md hover:bg-gray-100 transition-colors px-4 py-2 font-medium">
+              {ingredientsFields.map((field, index) => (
+                <div key={field.id} className="flex gap-2">
+                  <input type="text" id="ingredients" className={inputStyle} {...register(`ingredients.${index}.value`)} placeholder="Digite um ingrediente"/>
+                  {ingredientsFields.length>1 && <button
+                    type="button"
+                    className="bg-white border border-zinc-300 rounded-md hover:bg-gray-100 transition-colors px-4 py-2 font-medium"
+                    onClick={() => removeIngredients(index)}
+                  >
+                    Remover
+                  </button>}
+                </div>
+              ))}
+              <button className=" w-fit bg-white border border-zinc-300 rounded-md hover:bg-gray-100 transition-colors px-4 py-2 font-medium"  onClick={() => appendIngredients({value:""})}>
                 Adicionar Ingredientes
               </button>
             </div>
@@ -186,16 +221,21 @@ export default function RecipeFormModal({
           <div className="flex flex-col gap-1">
             <label htmlFor="instructions">Instruções</label>
             <div className="flex flex-col gap-1">
-              <div className="flex gap-2">
-                <textarea id="instructions" className={inputStyle} />
-                <button
-                  type="button"
-                  className="h-fit bg-white border border-zinc-300 rounded-md hover:bg-gray-100 transition-colors px-4 py-2 font-medium"
-                >
-                  Remover
-                </button>
-              </div>
-              <button className=" w-fit bg-white border border-zinc-300 rounded-md hover:bg-gray-100 transition-colors px-4 py-2 font-medium">
+              {/* conteúdo */}
+              {instructionFields.map((field, index) => (
+                <div key={field.id} className="flex gap-2">
+                  <input type="text" id="instructions" className={inputStyle} {...register(`instructions.${index}.value`)} placeholder="Digite uma instrução"/>
+                  {instructionFields.length>1 && <button
+                    type="button"
+                    className="bg-white border border-zinc-300 rounded-md hover:bg-gray-100 transition-colors px-4 py-2 font-medium"
+                    onClick={() => removeInstructions(index)}
+                  >
+                    Remover
+                  </button>}
+                </div>
+              ))}
+              <button className=" w-fit bg-white border border-zinc-300 rounded-md hover:bg-gray-100 transition-colors px-4 py-2 font-medium"
+              onClick={() => appendInstructions({value:""})}>
                 Adicionar Instruções
               </button>
             </div>
