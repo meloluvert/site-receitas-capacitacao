@@ -15,10 +15,13 @@ import {
   recipeSchema,
 } from "@/lib/formValidationSchemas/recipeSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useEffect } from "react";
 interface RecipeFormModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (recipe: Omit<Recipe, "id">) => void;
+  onSave: (recipe: Omit<Recipe, "id"> | Recipe) => void;
+  mode: "create" | "edit"
+  recipe?: Recipe
 }
 
 const DEFAULT_VALUES: RecipeFormData = {
@@ -35,8 +38,12 @@ const DEFAULT_VALUES: RecipeFormData = {
 export default function RecipeFormModal({
   isOpen,
   onClose,
-  onSave
+  onSave,
+  recipe,
+  mode
+
 }: RecipeFormModalProps) {
+
   const {
     register,
     reset,
@@ -67,6 +74,20 @@ export default function RecipeFormModal({
     name: "instructions",
   });
 
+  useEffect(() => {
+    if(isOpen){
+      if(mode === "edit" && recipe){
+        reset({
+          ...recipe, 
+          ingredients: recipe.ingredients.map((ing)=> ({value:ing})),
+          instructions: recipe.ingredients.map((inst)=> ({value:inst}))
+        })
+      }
+    } else{
+      reset(DEFAULT_VALUES)
+    }
+  },[mode,isOpen, recipe, reset])
+
   const onSubmit = (data: RecipeFormData) => {
     const recipeData = {
       ...data,
@@ -74,7 +95,7 @@ export default function RecipeFormModal({
       instructions: data.ingredients.map((instruction) => instruction.value),
     };
     console.log(recipeData);
-    onSave(recipeData)
+    onSave(mode == "edit" && recipe ? {...recipeData, id:recipe.id}:recipeData)
     reset();
     onClose();
   };
@@ -84,7 +105,7 @@ export default function RecipeFormModal({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white min-w-2xl max-h-[90vh] overflow-scroll">
         <DialogHeader>
-          <DialogTitle>Nova receita</DialogTitle>
+          <DialogTitle>{mode === "create" ? "Nova" : "Editar"} receita</DialogTitle>
         </DialogHeader>
         <form
           className="flex flex-col gap-4 w-full"
@@ -299,7 +320,7 @@ export default function RecipeFormModal({
               type="submit"
               className="bg-black rounded-md hover:bg-gray-800 transition-colors px-4 py-2 font-medium text-white"
             >
-              Criar Receita
+              {mode === "create" ? "Criar receita" : "Salvar alterações"} 
             </button>
           </div>
         </form>

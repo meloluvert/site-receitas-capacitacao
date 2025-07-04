@@ -4,10 +4,12 @@ import { Recipe } from "@/lib/data";
 import { Edit, Trash2 } from "lucide-react";
 interface RecipeCardProps {
   recipe: Recipe;
+  onEdit : () => void
 }
-export function RecipeCard({ recipe }: RecipeCardProps) {
+export function RecipeCard({ recipe, onEdit }: RecipeCardProps) {
     const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) =>{
         e.preventDefault()
+        onEdit()
     }
     const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) =>{
         e.preventDefault()
