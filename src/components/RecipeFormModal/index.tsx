@@ -103,7 +103,7 @@ export default function RecipeFormModal({
   const inputStyle = "p-2 border border-zinc-200 rounded-md flex-grow w-full";
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-white min-w-2xl max-h-[90vh] overflow-scroll">
+<DialogContent className="bg-white w-[95vw] max-w-3xl max-h-[90vh] text-base overflow-y-auto sm:rounded-lg sm:w-full">
         <DialogHeader>
           <DialogTitle>{mode === "create" ? "Nova" : "Editar"} receita</DialogTitle>
         </DialogHeader>
@@ -111,7 +111,7 @@ export default function RecipeFormModal({
           className="flex flex-col gap-4 w-full"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {/* Título */}
             <div className="flex flex-col gap-1">
               <label htmlFor="title">Título</label>
@@ -175,7 +175,7 @@ export default function RecipeFormModal({
             )}
           </div>
 
-          <div className="grid grid-cols-3 gap-1">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-1">
             {/* Tempo de Preparo */}
             <div className="flex flex-col gap-1">
               <label htmlFor="prepTime">Tempo de preparo</label>
@@ -231,7 +231,7 @@ export default function RecipeFormModal({
             <div className="flex flex-col gap-1">
               {/* content */}
               {ingredientsFields.map((field, index) => (
-                <div key={field.id} className="flex gap-2">
+                <div key={field.id} className="flex flex-col sm:flex-row gap-2">
                   <div className="flex-grow">
                     <input
                       type="text"
@@ -272,7 +272,7 @@ export default function RecipeFormModal({
             <div className="flex flex-col gap-1">
               {/* conteúdo */}
               {instructionFields.map((field, index) => (
-                <div key={field.id} className="flex gap-2">
+                <div key={field.id} className="flex flex-col sm:flex-row gap-2">
                   <div className="flex-grow">
                     <textarea
                       id="instructions"
