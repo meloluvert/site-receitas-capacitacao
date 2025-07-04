@@ -5,13 +5,16 @@ import { Edit, Trash2 } from "lucide-react";
 interface RecipeCardProps {
   recipe: Recipe;
   onEdit : () => void
+  onDelete: () => void
 }
-export function RecipeCard({ recipe, onEdit }: RecipeCardProps) {
+export function RecipeCard({ recipe, onEdit, onDelete }: RecipeCardProps) {
     const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) =>{
         e.preventDefault()
         onEdit()
     }
     const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) =>{
+
+      onDelete()
         e.preventDefault()
     }
   return (
