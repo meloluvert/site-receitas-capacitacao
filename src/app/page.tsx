@@ -1,3 +1,4 @@
+"use client"
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { recipes } from "@/lib/data";
@@ -26,7 +27,7 @@ export default function Home() {
           <h2 className="text-lg font-bold">Receitas em Destaque</h2>
           <div className="flex flex-col sm:flex-row w-full gap-8">
             {featuredRecipes.map((recipe) => (
-              <RecipeCard key={recipe.id} recipe={recipe} />
+              <RecipeCard key={recipe.id} recipe={recipe} onEdit={() => null} onDelete={() => null} />
             ))}
           </div>
           <Link
