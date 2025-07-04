@@ -1,4 +1,5 @@
 import { useFieldArray, useForm } from "react-hook-form";
+import { Recipe } from "@/lib/data";
 import {
   Dialog,
   DialogClose,
@@ -17,13 +18,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 interface RecipeFormModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSave: (recipe: Omit<Recipe, "id">) => void;
 }
 
 const DEFAULT_VALUES: RecipeFormData = {
   title: "",
   category: "",
   description: "",
-  imageURL: "",
+  image: "",
   prepTime: "",
   cookTime: "",
   servings: 1,
@@ -33,6 +35,7 @@ const DEFAULT_VALUES: RecipeFormData = {
 export default function RecipeFormModal({
   isOpen,
   onClose,
+  onSave
 }: RecipeFormModalProps) {
   const {
     register,
@@ -71,6 +74,7 @@ export default function RecipeFormModal({
       instructions: data.ingredients.map((instruction) => instruction.value),
     };
     console.log(recipeData);
+    onSave(recipeData)
     reset();
     onClose();
   };
@@ -135,17 +139,17 @@ export default function RecipeFormModal({
 
           {/* URL DA IMAGEM */}
           <div className="flex flex-col gap-1">
-            <label htmlFor="imageUrl">URL da imagem</label>
+            <label htmlFor="image">URL da imagem</label>
             <input
-              {...register("imageURL")}
+              {...register("image")}
               type="text"
               placeholder="/placeholder.svg"
-              id="imageUrl"
+              id="image"
               className={inputStyle}
             />
-            {errors.imageURL && (
+            {errors.image && (
               <span className="text-sm text-red-500">
-                {errors.imageURL.message}
+                {errors.image.message}
               </span>
             )}
           </div>
