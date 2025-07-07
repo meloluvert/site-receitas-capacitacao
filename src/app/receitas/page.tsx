@@ -1,8 +1,7 @@
 "use client";
 
-
 import { RecipeCard } from "@/components/RecipeCard";
-import { Recipe} from "@/lib/data";
+import { Recipe } from "@/lib/data";
 import { Plus } from "lucide-react";
 import RecipeFormModal from "@/components/RecipeFormModal";
 import { useEffect, useState } from "react";
@@ -14,40 +13,49 @@ export default function ReceitasPage() {
   const [isDeleteConfirmationModalOpen, setIsDeleteConfirmationModalOpen] =
     useState(false);
 
-    
-
   const [modalMode, setModalMode] = useState<"create" | "edit">("create");
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | undefined>(
     undefined
   );
 
   //paara controlar o estado da pesquisa
-  const [searchSentence, setSearchSentence] = useState("")
+  const [searchSentence, setSearchSentence] = useState("");
 
-  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipes)
+  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipes);
 
-  useEffect(()=>{
+  useEffect(() => {
     const fecthRecipes = async () => {
       try {
-        const response = await api.get("/recipes")
+        const response = await api.get("/recipes");
 
-        setRecipes(response.data)
+        setRecipes(response.data);
       } catch (error) {
-        console.error("Erro ao requisitar receitas:", error)
+        console.error("Erro ao requisitar receitas:", error);
       }
-    }
+    };
     fecthRecipes();
-  },[])
+  }, []);
   //usei o useeffect, toda vez que searhSnetence muda, as receitas serão outras
-  useEffect(() =>{
-    setFilteredRecipes(recipes.filter(
+  useEffect(() => {
+    setFilteredRecipes(
+      recipes.filter(
         (recipe) =>
           recipe.title.toLowerCase().includes(searchSentence.toLowerCase()) ||
-          recipe.description.toLowerCase().includes(searchSentence.toLowerCase()) ||
-          recipe.category.toLowerCase().includes(searchSentence.toLowerCase()) ||
-          recipe.ingredients.some((ingredient) => ingredient.value.toLowerCase().includes(searchSentence.toLowerCase())),
-      ))
-  },[searchSentence, recipes])
+          recipe.description
+            .toLowerCase()
+            .includes(searchSentence.toLowerCase()) ||
+          recipe.category
+            .toLowerCase()
+            .includes(searchSentence.toLowerCase()) ||
+          recipe.ingredients.some((ingredient) =>
+            (typeof ingredient === "string"
+              ? ingredient.toLowerCase()
+              : ingredient.value.toLowerCase()
+            ).includes(searchSentence.toLowerCase())
+          )
+      )
+    );
+  }, [searchSentence, recipes]);
 
   const handleOpenCreateModal = () => {
     setModalMode("create");
@@ -64,23 +72,27 @@ export default function ReceitasPage() {
   };
 
   //omit vai OMITIR os campos que tu não quer
-  const handleSaveRecipe = (recipeData: Omit<Recipe, "id"> | Recipe) => {
-    if (modalMode === "create") {
-      const newRecipe: Recipe = {
-        ...recipeData,
-        id: (recipes.length + 1).toString(),
-      };
-      setRecipes((prev) => [...prev, newRecipe]);
-    } else {
-      //edit
-      const updatedRecipe = recipeData as Recipe;
-      setRecipes((prev) =>
-        prev.map((recipe) =>
-          recipe.id === updatedRecipe.id ? updatedRecipe : recipe
-        )
-      );
+  const handleSaveRecipe = async (recipeData: Omit<Recipe, "id"> | Recipe) => {
+
+    try {
+      if (modalMode === "create") {
+        const response = await api.post("/recipes", recipeData)
+        const newRecipe = response.data
+        setRecipes((prev) => [...prev, newRecipe])
+      } else {
+        //edit
+        const updatedRecipe = recipeData as Recipe;
+        setRecipes((prev) =>
+          prev.map((recipe) =>
+            recipe.id === updatedRecipe.id ? updatedRecipe : recipe
+          )
+        );
+      }
+      handleCloseModal();
+    } catch (error) {
+      
     }
-    handleCloseModal();
+    
   };
 
   const handleOpenDeleteConfirmationModal = (recipe: Recipe) => {
@@ -107,7 +119,6 @@ export default function ReceitasPage() {
             className="flex items-center gap-2 px-4 py-2 rounded-lg text-white w-fit bg-black hover:bg-gray-800 transition-colors"
           >
             <Plus size={16} />
-            
             Nova Receita
           </button>
         </div>
@@ -116,7 +127,7 @@ export default function ReceitasPage() {
             type="text"
             placeholder="Pesquisar receitas por título, descrição, categoria ou ingredientes..."
             value={searchSentence}
-           onChange={(e) => setSearchSentence(e.target.value)}
+            onChange={(e) => setSearchSentence(e.target.value)}
             className=" border-2 border-black focus:border-black text-black h-4 w-full p-4 rounded"
           />
         </div>
