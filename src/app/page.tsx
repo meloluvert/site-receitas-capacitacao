@@ -44,7 +44,7 @@ const [recipes,setRecipes] = useState<Recipe[]>([])
           <h2 className="text-lg font-bold">Receitas em Destaque</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 w-full gap-8">
             {recipes.map((recipe) => (
-              <RecipeCard key={recipe.id} recipe={recipe} onEdit={() => null} onDelete={() => null} />
+              <RecipeCard key={recipe.id} recipe={recipe} />
             ))}
           </div>
           <Link

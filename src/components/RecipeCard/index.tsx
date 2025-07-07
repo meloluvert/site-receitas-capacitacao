@@ -37,14 +37,14 @@ export function RecipeCard({ recipe, onEdit, onDelete }: RecipeCardProps) {
               {recipe.category}
             </span>
 
-            <div className="flex items-center ">
+            <div className="flex items-center ${!onEdiit} ">
               {/* editar                 */}
               
-              <button type="button" onClick={(e) => handleEdit(e)} className="p-2 border border-gray-200 rounded hover:bg-gray-200 transition-colors">
+              <button type="button" onClick={(e) => handleEdit(e)} className={`${!onEdit && 'hidden'} p-2 border border-gray-200 rounded hover:bg-gray-200 transition-colors`}>
                 <Edit size={16} />
               </button>
               {/* remover                 */}
-              <button type="button" onClick={(e) => handleDelete(e)} className="p-2 border border-gray-200 rounded hover:bg-gray-200 transition-colors">
+              <button type="button" onClick={(e) => handleDelete(e)} className={` ${!onDelete && 'hidden'} p-2 border border-gray-200 rounded hover:bg-gray-200 transition-colors`}>
                 <Trash2 size={16} />
               </button>
             </div>
