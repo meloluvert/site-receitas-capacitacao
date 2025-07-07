@@ -7,6 +7,7 @@ import RecipeFormModal from "@/components/RecipeFormModal";
 import { useEffect, useState } from "react";
 import DeleteConfirmationModal from "@/components/DeleteConfirmation";
 import api from "@/lib/api";
+import { toast } from "sonner";
 export default function ReceitasPage() {
   const [isRecipeModalOpen, setIsRecipeModalOpen] = useState(false);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -31,6 +32,8 @@ export default function ReceitasPage() {
         setRecipes(response.data);
       } catch (error) {
         console.error("Erro ao requisitar receitas:", error);
+        toast.error("Erro ao requisitar as receitas, tente novamente mais tarde");
+
       }
     };
     fecthRecipes();
@@ -48,7 +51,9 @@ export default function ReceitasPage() {
             .toLowerCase()
             .includes(searchSentence.toLowerCase()) ||
           recipe.ingredients.some((ingredient) =>
-            ingredient.value.toLowerCase().includes(searchSentence.toLowerCase())
+            ingredient.value
+              .toLowerCase()
+              .includes(searchSentence.toLowerCase())
           )
       )
     );
@@ -70,28 +75,37 @@ export default function ReceitasPage() {
 
   //omit vai OMITIR os campos que tu não quer
   const handleSaveRecipe = async (recipeData: Omit<Recipe, "id"> | Recipe) => {
-
     try {
       if (modalMode === "create") {
-        const response = await api.post("/recipes", recipeData)
-        const newRecipe = response.data
-        setRecipes((prev) => [...prev, newRecipe])
+        const response = await api.post("/recipes", recipeData);
+        const newRecipe = response.data;
+        setRecipes((prev) => [...prev, newRecipe]);
+
+        toast.success("Receita criada com sucesso!");
       } else {
         //edit
         const updatedRecipe = recipeData as Recipe;
 
-        const response = await api.put(`/recipes/${updatedRecipe.id}`, updatedRecipe)
+        const response = await api.put(
+          `/recipes/${updatedRecipe.id}`,
+          updatedRecipe
+        );
         setRecipes((prev) =>
           prev.map((recipe) =>
             recipe.id === updatedRecipe.id ? response.data : recipe
           )
         );
+        toast.success("Receita editada com sucesso!");
+
       }
       handleCloseModal();
     } catch (error) {
-      console.error(`Erro ao ${modalMode === "create" ? "criar" : "editar" } a receita `, error)
+      console.error(
+        `Erro ao ${modalMode === "create" ? "criar" : "editar"} a receita `,
+        error
+      );
+      toast.error(`Erro ao ${modalMode === "create" ? "criar" : "editar"} a receita `)
     }
-    
   };
 
   const handleOpenDeleteConfirmationModal = (recipe: Recipe) => {
@@ -99,20 +113,22 @@ export default function ReceitasPage() {
     setIsDeleteConfirmationModalOpen(true);
   };
 
-  const handleDeleteRecipe = async  () => {
+  const handleDeleteRecipe = async () => {
     try {
       if (selectedRecipe) {
-        await api.delete(`/recipes/${selectedRecipe.id}`)
+        await api.delete(`/recipes/${selectedRecipe.id}`);
         setRecipes((prev) =>
           prev.filter((recipe) => recipe.id !== selectedRecipe.id)
         );
         setIsDeleteConfirmationModalOpen(false);
         setSelectedRecipe(undefined);
       }
+      toast.success("Receita excluída com sucesso!");
+
     } catch (error) {
-      console.error("Error a deletar receita", error)
+      console.error("Error a deletar receita", error);
+      toast.error("Erro ao deletar receita");
     }
-   
   };
   return (
     <main className="flex-grow py-8 px-2 md:px-0">

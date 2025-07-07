@@ -1,7 +1,6 @@
 "use client"
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { recipes } from "@/lib/data";
 import { RecipeCard } from "@/components/RecipeCard";
 export default function Home() {
   const featuredRecipes = recipes.slice(0, 3);
