@@ -4,28 +4,28 @@ import { Recipe } from "@/lib/data";
 import { Edit, Trash2 } from "lucide-react";
 interface RecipeCardProps {
   recipe: Recipe;
-  onEdit : () => void
-  onDelete: () => void
+  onEdit?: () => void
+  onDelete?: () => void
 }
 export function RecipeCard({ recipe, onEdit, onDelete }: RecipeCardProps) {
     const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) =>{
         e.preventDefault()
-        onEdit()
+        onEdit?.()
     }
     const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) =>{
 
-      onDelete()
+      onDelete?.()
         e.preventDefault()
     }
   return (
     <Link href={`/receitas/${recipe.id}`} className="w-full sm:w-auto">
       {/* imagem */}
-      <div className="border border-slate-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+      <div className="flex flex-col border border-slate-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow w-full">
         <div className="relative h-48 w-full">
           <Image src={recipe.image} alt={recipe.title} fill className="object-cover" />
         </div>
 
-        <div className="flex flex-col p-4 gap-4">
+        <div className="flex flex-col justify-between p-4 gap-4 flex-grow">
           {/* titulo e descrição */}
           <div className="space-y-2">
             <h3 className="text-lg font-bold hover:text-orange-500 transition-colors">{recipe.title}</h3>

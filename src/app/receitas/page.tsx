@@ -25,7 +25,7 @@ export default function ReceitasPage() {
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipes);
 
   useEffect(() => {
-    const fecthRecipes = async () => {
+    const fetchRecipes = async () => {
       try {
         const response = await api.get("/recipes");
 
@@ -36,7 +36,7 @@ export default function ReceitasPage() {
 
       }
     };
-    fecthRecipes();
+    fetchRecipes();
   }, []);
   //usei o useeffect, toda vez que searhSnetence muda, as receitas serão outras
   useEffect(() => {
