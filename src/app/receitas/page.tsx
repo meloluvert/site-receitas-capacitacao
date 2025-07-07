@@ -48,10 +48,7 @@ export default function ReceitasPage() {
             .toLowerCase()
             .includes(searchSentence.toLowerCase()) ||
           recipe.ingredients.some((ingredient) =>
-            (typeof ingredient === "string"
-              ? ingredient.toLowerCase()
-              : ingredient.value.toLowerCase()
-            ).includes(searchSentence.toLowerCase())
+            ingredient.value.toLowerCase().includes(searchSentence.toLowerCase())
           )
       )
     );
@@ -82,9 +79,11 @@ export default function ReceitasPage() {
       } else {
         //edit
         const updatedRecipe = recipeData as Recipe;
+
+        const response = await api.put(`/recipes/${updatedRecipe.id}`, updatedRecipe)
         setRecipes((prev) =>
           prev.map((recipe) =>
-            recipe.id === updatedRecipe.id ? updatedRecipe : recipe
+            recipe.id === updatedRecipe.id ? response.data : recipe
           )
         );
       }
