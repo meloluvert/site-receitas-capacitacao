@@ -89,7 +89,7 @@ export default function ReceitasPage() {
       }
       handleCloseModal();
     } catch (error) {
-      
+      console.error(`Erro ao ${modalMode === "create" ? "criar" : "editar" } a receita `, error)
     }
     
   };
