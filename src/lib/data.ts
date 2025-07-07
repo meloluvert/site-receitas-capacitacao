@@ -1,4 +1,4 @@
-export type Recipe = {
+  export type Recipe = {
     id: string;
     title: string;
     description: string;
@@ -6,7 +6,7 @@ export type Recipe = {
     prepTime: string;
     cookTime: string;
     servings: number;
-    ingredients: string[];
+    ingredients: (string | { value: string })[];
     instructions: string[];
     category: string;
   }

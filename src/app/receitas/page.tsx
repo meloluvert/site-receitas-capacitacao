@@ -2,14 +2,15 @@
 
 
 import { RecipeCard } from "@/components/RecipeCard";
-import { Recipe, recipes as initialRecipes } from "@/lib/data";
+import { Recipe} from "@/lib/data";
 import { Plus } from "lucide-react";
 import RecipeFormModal from "@/components/RecipeFormModal";
 import { useEffect, useState } from "react";
 import DeleteConfirmationModal from "@/components/DeleteConfirmation";
+import api from "@/lib/api";
 export default function ReceitasPage() {
   const [isRecipeModalOpen, setIsRecipeModalOpen] = useState(false);
-  const [recipes, setRecipes] = useState<Recipe[]>(initialRecipes);
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [isDeleteConfirmationModalOpen, setIsDeleteConfirmationModalOpen] =
     useState(false);
 
@@ -25,6 +26,18 @@ export default function ReceitasPage() {
 
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipes)
 
+  useEffect(()=>{
+    const fecthRecipes = async () => {
+      try {
+        const response = await api.get("/recipes")
+
+        setRecipes(response.data)
+      } catch (error) {
+        console.error("Erro ao requisitar receitas:", error)
+      }
+    }
+    fecthRecipes();
+  },[])
   //usei o useeffect, toda vez que searhSnetence muda, as receitas serão outras
   useEffect(() =>{
     setFilteredRecipes(recipes.filter(
@@ -32,7 +45,7 @@ export default function ReceitasPage() {
           recipe.title.toLowerCase().includes(searchSentence.toLowerCase()) ||
           recipe.description.toLowerCase().includes(searchSentence.toLowerCase()) ||
           recipe.category.toLowerCase().includes(searchSentence.toLowerCase()) ||
-          recipe.ingredients.some((ingredient) => ingredient.toLowerCase().includes(searchSentence.toLowerCase())),
+          recipe.ingredients.some((ingredient) => ingredient.value.toLowerCase().includes(searchSentence.toLowerCase())),
       ))
   },[searchSentence, recipes])
 
